@@ -1,5 +1,6 @@
 import uniqid from 'uniqid';
 import Joi from 'joi';
+import { prisma } from '../startup/db';
 
 // Types
 
@@ -13,26 +14,23 @@ export interface IProduct {
 
 // Database Queries
 
-// export const addProduct = async (
-// 	name: string,
-// 	stock: number,
-// 	price: number,
-// 	callback: any
-// ) => {
-// 	const id = uniqid();
-// 	const date = new Date(); // We could use moment.js
+export const addProduct = async (
+	id: string,
+	name: string,
+	stock: number,
+	price: number
+) => {
+	const result = await prisma.product.create({
+		data: {
+			id,
+			name,
+			stock,
+			price,
+		},
+	});
 
-// 	const sql = `INSERT INTO PRODUCTS 
-//                     (id, name, stock, price, date) 
-//                     VALUES ($id, $name, $stock, $price, $date)`;
-// 	database.run(sql, [id, name, stock, price, date], (error: any) => {
-// 		if (error) {
-// 			callback(error.message);
-// 		}
-// 		const message = 'The Product has been created successfully.';
-// 		callback(message);
-// 	});
-// };
+	return result;
+};
 
 // export const findProduct = (id: string, callback: any) => {
 // 	const sql = `SELECT * FROM PRODUCTS WHERE id = $id`;

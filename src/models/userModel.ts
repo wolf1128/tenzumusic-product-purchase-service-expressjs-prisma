@@ -1,9 +1,7 @@
 import uniqid from 'uniqid';
 import bcrypt from 'bcryptjs';
 import Joi from 'joi';
-import { Prisma, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '../startup/db';
 
 // Types
 
@@ -17,6 +15,8 @@ export interface IUser {
 	purchased_products: [string];
 }
 
+// Helper Functions:
+
 export const hashPassword = async (enteredPassword: string) => {
 	const salt = await bcrypt.genSalt(10);
 	return await bcrypt.hash(enteredPassword, salt);
@@ -28,6 +28,8 @@ export const matchPassword = async (
 ) => {
 	return await bcrypt.compare(enteredPassword, password);
 };
+
+// Queries
 
 export const createUser = async (
 	id: string,
@@ -52,29 +54,12 @@ export const createUser = async (
 	return result;
 };
 
-export const findOneUser = async (id: string) => {	
-
+export const findOneUser = async (id: string) => {
 	const user = await prisma.user.findFirst({
-		where: { id: id }
-	})
+		where: { id: id },
+	});
 
 	return user;
-
-	// const sql = `SELECT * FROM USERS WHERE ID = $id`;
-
-	// database.get(sql, [id], async (error: any, userRow: IUser) => {
-	// 	if (error) {
-	// 		callback(error.message);
-	// 	}
-
-	// 	// check passwords
-	// 	if (await bcrypt.compare(password, userRow.password)) {
-	// 		userRow.password = '****';
-	// 		callback(userRow);
-	// 	} else {
-	// 		callback(new Error('Passwords are not match!'));
-	// 	}
-	// });
 };
 
 // export const findUserById = (id: string, callback: any) => {

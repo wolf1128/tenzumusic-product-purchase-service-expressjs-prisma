@@ -1,36 +1,42 @@
-// import { RequestHandler } from 'express';
-// import {
-// 	addProduct,
-// 	findAllProductsAndFilter,
-// 	findProduct,
-// 	updateProductStock,
-// 	validateCreateProduct,
-// 	validatePurchaseProduct,
-// } from '../models/productModel';
-// import {
-// 	findUser,
-// 	findUserById,
-// 	updateUserPurchasedProducts,
-// } from '../models/userModel';
+import { RequestHandler } from 'express';
+import {
+	addProduct,
+	// findAllProductsAndFilter,
+	// findProduct,
+	// updateProductStock,
+	validateCreateProduct,
+	// validatePurchaseProduct,
+} from '../models/productModel';
+import {
+	// findUser,
+	// findUserById,
+	// updateUserPurchasedProducts,
+} from '../models/userModel';
+import 'express-async-errors';
+import uniqid from 'uniqid'
+
 
 // // @desc        Create a new product
 // // @route       POST /api/products
 // // @access      Public
-// export const createProduct: RequestHandler = async (req, res) => {
-// 	const { error } = validateCreateProduct(req.body);
-// 	if (error) return res.status(400).send(error.details[0].message);
+export const createProduct: RequestHandler = async (req, res) => {
+	const { error } = validateCreateProduct(req.body);
+	if (error) return res.status(400).send(error.details[0].message);
 
-// 	const { name, stock, price } = req.body as {
-// 		name: string;
-// 		stock: number;
-// 		price: number;
-// 	};
+	const { name, stock, price } = req.body as {
+		name: string;
+		stock: number;
+		price: number;
+	};
+    const id = uniqid();
 
-// 	// Store in the databses
-// 	addProduct(name, stock, price, (result: any) => {
-// 		res.send(result);
-// 	});
-// };
+	await addProduct(id, name, stock, price);
+
+    const message = 'The Product has been created successfully.';
+
+
+    res.send(message);
+};
 
 // // @desc        Get product info
 // // @route       GET /api/products/:id
