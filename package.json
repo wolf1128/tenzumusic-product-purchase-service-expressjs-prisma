@@ -1,0 +1,45 @@
+{
+	"name": "tenzumusic-product-purchase-service-expressjs-prisma",
+	"version": "1.0.0",
+	"description": "Product Purchase Service",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "nodemon dist/server.js",
+		"start": "node dist/server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/professordev7/tenzumusic-product-purchase-service-expressjs-prisma.git"
+	},
+	"author": "Salar Farahmand",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/professordev7/tenzumusic-product-purchase-service-expressjs-prisma/issues"
+	},
+	"homepage": "https://github.com/professordev7/tenzumusic-product-purchase-service-expressjs-prisma#readme",
+	"dependencies": {
+		"@prisma/client": "^3.7.0",
+		"bcryptjs": "^2.4.3",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.2",
+		"joi": "^17.5.0",
+		"sqlite3": "^5.0.2",
+		"uniqid": "^5.4.0"
+	},
+	"devDependencies": {
+		"@types/bcryptjs": "^2.4.2",
+		"@types/express": "^4.17.13",
+		"@types/node": "^17.0.4",
+		"@types/sqlite3": "^3.1.8",
+		"@types/uniqid": "^5.3.2",
+		"@types/validator": "^13.7.1",
+		"nodemon": "^2.0.15",
+		"prisma": "^3.7.0",
+		"ts-node": "^10.4.0",
+		"typescript": "^4.5.4"
+	},
+	"prisma": {
+		"seed": "ts-node prisma/seed.ts"
+	}
+}
