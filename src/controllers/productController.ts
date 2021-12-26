@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import {
 	addProduct,
 	findAllProductsAndFilter,
+	findOneProduct,
 	// findProduct,
 	// updateProductStock,
 	validateCreateProduct,
@@ -38,13 +39,13 @@ export const createProduct: RequestHandler = async (req, res) => {
 // // @desc        Get product info
 // // @route       GET /api/products/:id
 // // @access      Public
-// export const getProduct: RequestHandler<{ id: string }> = async (req, res) => {
-// 	const productId = req.params.id;
+export const getProduct: RequestHandler<{ id: string }> = async (req, res) => {
+	const productId = req.params.id;
 
-// 	findProduct(productId, (result: any) => {
-// 		res.send(result);
-// 	});
-// };
+	const product = await findOneProduct(productId);
+
+	res.json(product);
+};
 
 // // @desc        Get all products info
 // // @route       GET /api/products?minPrice=xx&maxPrice=xx

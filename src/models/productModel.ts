@@ -32,15 +32,11 @@ export const addProduct = async (
 	return result;
 };
 
-// export const findProduct = (id: string, callback: any) => {
-// 	const sql = `SELECT * FROM PRODUCTS WHERE id = $id`;
-// 	database.get(sql, [id], (error, row) => {
-// 		if (error) {
-// 			callback(error.message);
-// 		}
-// 		callback(row);
-// 	});
-// };
+export const findOneProduct = async (id: string) => {
+	return await prisma.product.findFirst({
+		where: { id },
+	});
+};
 
 export const findAllProductsAndFilter = async (
 	minPrice: number,
