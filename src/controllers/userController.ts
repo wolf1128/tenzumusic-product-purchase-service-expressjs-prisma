@@ -2,13 +2,14 @@ import { RequestHandler } from 'express';
 import {
 	createUser,
 	findOneUser,
-	// findUser,
 	hashPassword,
 	matchPassword,
 	validateGetUser,
 	validateRegisterUser,
 } from '../models/userModel';
 import uniqid from 'uniqid';
+import 'express-async-errors';
+
 
 // @desc        Register a new user
 // @route       POST /api/users
