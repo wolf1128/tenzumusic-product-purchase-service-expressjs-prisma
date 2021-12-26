@@ -1,20 +1,18 @@
 import { RequestHandler } from 'express';
 import {
 	addProduct,
-	// findAllProductsAndFilter,
+	findAllProductsAndFilter,
 	// findProduct,
 	// updateProductStock,
 	validateCreateProduct,
 	// validatePurchaseProduct,
 } from '../models/productModel';
-import {
-	// findUser,
-	// findUserById,
-	// updateUserPurchasedProducts,
-} from '../models/userModel';
+import // findUser,
+// findUserById,
+// updateUserPurchasedProducts,
+'../models/userModel';
 import 'express-async-errors';
-import uniqid from 'uniqid'
-
+import uniqid from 'uniqid';
 
 // // @desc        Create a new product
 // // @route       POST /api/products
@@ -28,14 +26,13 @@ export const createProduct: RequestHandler = async (req, res) => {
 		stock: number;
 		price: number;
 	};
-    const id = uniqid();
+	const id = uniqid();
 
 	await addProduct(id, name, stock, price);
 
-    const message = 'The Product has been created successfully.';
+	const message = 'The Product has been created successfully.';
 
-
-    res.send(message);
+	res.send(message);
 };
 
 // // @desc        Get product info
@@ -52,25 +49,24 @@ export const createProduct: RequestHandler = async (req, res) => {
 // // @desc        Get all products info
 // // @route       GET /api/products?minPrice=xx&maxPrice=xx
 // // @access      Public
-// export const getProducts: RequestHandler<
-// 	any,
-// 	any,
-// 	any,
-// 	{
-// 		minPrice: string;
-// 		maxPrice: string;
-// 	}
-// > = async (req, res) => {
-// 	const { minPrice, maxPrice } = req.query;
+export const getProducts: RequestHandler<
+	any,
+	any,
+	any,
+	{
+		minPrice: string;
+		maxPrice: string;
+	}
+> = async (req, res) => {
+	const { minPrice, maxPrice } = req.query;
 
-// 	findAllProductsAndFilter(
-// 		parseInt(minPrice),
-// 		parseInt(maxPrice),
-// 		(result: any) => {
-// 			res.send(result);
-// 		}
-// 	);
-// };
+	const users = await findAllProductsAndFilter(
+		parseInt(minPrice),
+		parseInt(maxPrice)
+	);
+
+	res.json(users);
+};
 
 // // @desc        Purchase product
 // // @route       PUT /api/products/purchase

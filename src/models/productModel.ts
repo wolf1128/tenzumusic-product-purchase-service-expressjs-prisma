@@ -42,45 +42,51 @@ export const addProduct = async (
 // 	});
 // };
 
-// export const findAllProductsAndFilter = (
-// 	minPrice: number,
-// 	maxPrice: number,
-// 	callback: any
-// ) => {
-// 	if (minPrice & maxPrice) {
-// 		const sql = `SELECT * FROM PRODUCTS WHERE Price BETWEEN $minPrice AND $maxPrice`;
-// 		database.all(sql, [minPrice, maxPrice], (error, products: IProduct[]) => {
-// 			if (error) {
-// 				callback(error.message);
-// 			}
-// 			callback(products);
-// 		});
-// 	} else if (minPrice) {
-// 		const sql = `SELECT * FROM PRODUCTS WHERE Price >= $minPrice`;
-// 		database.all(sql, [minPrice], (error, products: IProduct[]) => {
-// 			if (error) {
-// 				callback(error.message);
-// 			}
-// 			callback(products);
-// 		});
-// 	} else if (maxPrice) {
-// 		const sql = `SELECT * FROM PRODUCTS WHERE Price <= $maxPrice`;
-// 		database.all(sql, [maxPrice], (error, products: IProduct[]) => {
-// 			if (error) {
-// 				callback(error.message);
-// 			}
-// 			callback(products);
-// 		});
-// 	} else {
-// 		const sql = `SELECT * FROM PRODUCTS`;
-// 		database.all(sql, [], (error, products: IProduct[]) => {
-// 			if (error) {
-// 				callback(error.message);
-// 			}
-// 			callback(products);
-// 		});
-// 	}
-// };
+export const findAllProductsAndFilter = async (
+	minPrice: number,
+	maxPrice: number
+) => {
+	if (minPrice & maxPrice) {
+		// Way#1
+		// const sql = `SELECT * FROM PRODUCTS WHERE Price BETWEEN $minPrice AND $maxPrice`;
+		// return await prisma.$queryRaw`${sql}`;
+		// Way#2
+		return await prisma.product.findMany({
+			where: {
+				AND: [
+					{
+						price: {
+							gte: minPrice,
+						},
+					},
+					{
+						price: {
+							lte: maxPrice,
+						},
+					},
+				],
+			},
+		});
+	} else if (minPrice) {
+		return await prisma.product.findMany({
+			where: {
+				price: {
+					gte: minPrice,
+				},
+			},
+		});
+	} else if (maxPrice) {
+		return await prisma.product.findMany({
+			where: {
+				price: {
+					lte: maxPrice,
+				},
+			},
+		});
+	} else {
+		return await prisma.product.findMany();
+	}
+};
 
 // export const updateProductStock = (
 // 	product: string,
