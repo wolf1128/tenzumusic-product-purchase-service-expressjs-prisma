@@ -11,6 +11,7 @@ Main objective is to develop a node.js service that handles below operations:
 
 ## Details
 
+- This application is completed based on the [`https://github.com/professordev7/tenzumusic-product-purchase-service-expressjs`](tenzumusic-product-purchase-service-expressjs) application
 - First, install the dependencies using `npm install`
-- Second, compile your typescript files using `tsc` in the separated cli
+- Second, compile your typescript files using `tsc` in the separated cli or use the `ts-node` tool
 - The service should be started with `npm run start` and listen on port 5000

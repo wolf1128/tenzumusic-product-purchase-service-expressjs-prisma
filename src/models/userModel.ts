@@ -80,14 +80,6 @@ export const updateUserPurchasedProducts = async (
 			purchased_products: newPurchasedProducts,
 		},
 	});
-
-	// const sql = `UPDATE USERS SET Purchased_products=$newPurchasedProducts WHERE ID=$user`;
-	// database.run(sql, [newPurchasedProducts, user], (error: any, row: any) => {
-	// 	if (error) {
-	// 		callback(error.message);
-	// 	}
-	// 	callback();
-	// });
 };
 
 // Validations
