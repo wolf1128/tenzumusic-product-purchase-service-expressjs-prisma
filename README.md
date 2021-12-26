@@ -7,11 +7,14 @@ Main objective is to develop a node.js service that handles below operations:
 - Create Product: Make a request to an endpoint to see the product details. Remember store the ID as unique and store the current date and time into Date field.
 - Fetch one product: Make a request to an endpoint to get the product info.
 - Fetch Products: Make a request include filters on the price field. If the request doesn't include any filters, fetch all products by default.
-- Purchase Product: First, check that the order count is not grater than the product stock then decrement the stock and push the ID to the Purchased_products of the user then return thankYou message with the total price, otherwise return error message to the user. 
+- Purchase Product: First, check that the order count is not grater than the product stock then decrement the stock and push the ID to the Purchased_products of the user then return thankYou message with the total price, otherwise return error message to the user.
+
+This application is completed based on the [`tenzumusic-product-purchase-service-expressjs`](https://github.com/professordev7/tenzumusic-product-purchase-service-expressjs) application
+
+The application re-developed using the amazing [`Prisma`](https://www.prisma.io/) ORM and added some other features like error handling middlewares.
 
 ## Details
 
-- This application is completed based on the [`https://github.com/professordev7/tenzumusic-product-purchase-service-expressjs`](tenzumusic-product-purchase-service-expressjs) application
 - First, install the dependencies using `npm install`
 - Second, compile your typescript files using `tsc` in the separated cli or use the `ts-node` tool
 - The service should be started with `npm run start` and listen on port 5000
