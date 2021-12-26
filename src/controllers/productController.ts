@@ -3,10 +3,11 @@ import {
 	addProduct,
 	findAllProductsAndFilter,
 	findOneProduct,
+	updateProductStock,
 	// findProduct,
 	// updateProductStock,
 	validateCreateProduct,
-	// validatePurchaseProduct,
+	validatePurchaseProduct,
 } from '../models/productModel';
 import // findUser,
 // findUserById,
@@ -14,6 +15,7 @@ import // findUser,
 '../models/userModel';
 import 'express-async-errors';
 import uniqid from 'uniqid';
+import { findUserById, updateUserPurchasedProducts } from '../models/userModel';
 
 // // @desc        Create a new product
 // // @route       POST /api/products
@@ -72,63 +74,70 @@ export const getProducts: RequestHandler<
 // // @desc        Purchase product
 // // @route       PUT /api/products/purchase
 // // @access      Public
-// export const purchaseProduct: RequestHandler = async (req, res) => {
-// 	const { error } = validatePurchaseProduct(req.body);
-// 	if (error) return res.status(400).send(error.details[0].message);
+export const purchaseProduct: RequestHandler = async (req, res) => {
+	const { error } = validatePurchaseProduct(req.body);
+	if (error) return res.status(400).send(error.details[0].message);
 
-// 	const {
-// 		user,
-// 		product,
-// 		count,
-// 	}: { user: string; product: string; count: number } = req.body;
+	const {
+		user: userId,
+		product: productId,
+		count,
+	}: { user: string; product: string; count: number } = req.body;
 
-// 	let totalPrice: number;
+	let totalPrice: number;
 
-// 	findProduct(product, (productInfo: any) => {
-// 		if (productInfo.stock < count) {
-// 			res.status(500).send({
-// 				message_fa: 'متاسفیم!تعداد درخواست بیشتر از موجودی است!',
-// 				message_en: 'Sorry! Order count is greather than the stock!',
-// 			});
-// 		} else {
-// 			const newStock = productInfo.stock - count;
-// 			totalPrice = productInfo.price * count;
-// 			updateProductStock(product, newStock, (err: any) => {
-// 				// console.log('error: ', err);
-// 			});
+	// (1) Find the product
+	const product = await findOneProduct(productId);
+	if (product) {
+		if (product.stock < count) {
+			res.status(500).send({
+				message_fa: 'متاسفیم!تعداد درخواست بیشتر از موجودی است!',
+				message_en: 'Sorry! Order count is greather than the stock!',
+			});
+		} else {
+			// (2) Update product stock
+			const newStock = product.stock - count;
+			totalPrice = product.price * count;
 
-// 			findUserById(user, (foundUser: any) => {
-// 				let userProducts = !foundUser.purchased_products
-// 					? null
-// 					: foundUser.purchased_products;
+			await updateProductStock(productId, newStock);
 
-// 				// Convert string to array (SQLite constraint) | ['1234', '567', '89']
-// 				let purchasedProducts = [];
-// 				if (userProducts) {
-// 					purchasedProducts = userProducts
-// 						.split("'")
-// 						.filter((p: string) => p !== '[' && p !== ']' && p !== ', ');
+			// (3) Find the User
+			const user = await findUserById(userId);
+			if (user) {
+				let userProducts = !user.purchased_products
+					? null
+					: user.purchased_products;
 
-// 					purchasedProducts.push(productInfo.id);
-// 				} else {
-// 					purchasedProducts = Array(productInfo.id);
-// 				}
+				// Convert string to array (SQLite constraint) | ['1234', '567', '89']
+				let purchasedProducts = [];
+				if (userProducts) {
+					purchasedProducts = userProducts
+						.split("'")
+						.filter((p: string) => p !== '[' && p !== ']' && p !== ', ');
 
-// 				// Convert back to string
-// 				let updatedPurchasedProducts = purchasedProducts.toString();
+					purchasedProducts.push(product.id);
+				} else {
+					purchasedProducts = Array(product.id);
+				}
 
-// 				updateUserPurchasedProducts(
-// 					user,
-// 					updatedPurchasedProducts,
-// 					(result: any) => {
-// 						res.send({
-// 							successMessage_fa: 'با تشکر از خرید شما!',
-// 							successMessage_en: 'Thanks for purchasing from us!',
-// 							totalPrice,
-// 						});
-// 					}
-// 				);
-// 			});
-// 		}
-// 	});
-// };
+				// Convert back to string
+				let updatedPurchasedProducts = purchasedProducts.toString();
+
+				// (4) Update user Purchased Products
+				await updateUserPurchasedProducts(userId, updatedPurchasedProducts);
+
+				res.json({
+					successMessage_fa: 'با تشکر از خرید شما!',
+					successMessage_en: 'Thanks for purchasing from us!',
+					totalPrice,
+				});
+			} else {
+				res.status(404);
+				throw new Error('User not found!');
+			}
+		}
+	} else {
+		res.status(404);
+		throw new Error('Product not found!');
+	}
+};

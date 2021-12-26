@@ -84,19 +84,19 @@ export const findAllProductsAndFilter = async (
 	}
 };
 
-// export const updateProductStock = (
-// 	product: string,
-// 	newStock: number,
-// 	callback: any
-// ) => {
-// 	const sql = `UPDATE PRODUCTS SET Stock=$newStock WHERE ID=$product`;
-// 	database.run(sql, [newStock, product], (error: any) => {
-// 		if (error) {
-// 			callback(error.message);
-// 		}
-// 		callback();
-// 	});
-// };
+export const updateProductStock = async (
+	productId: string,
+	newStock: number
+) => {
+	return await prisma.product.update({
+		where: {
+			id: productId,
+		},
+		data: {
+			stock: newStock,
+		},
+	});
+};
 
 // Validations
 

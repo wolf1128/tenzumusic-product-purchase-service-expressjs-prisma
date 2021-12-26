@@ -62,30 +62,33 @@ export const findOneUser = async (id: string) => {
 	return user;
 };
 
-// export const findUserById = (id: string, callback: any) => {
-// 	const sql = `SELECT * FROM USERS WHERE ID = $id`;
+export const findUserById = async (id: string) => {
+	return await prisma.user.findFirst({
+		where: { id },
+	});
+};
 
-// 	database.get(sql, [id], (error, row) => {
-// 		if (error) {
-// 			callback(error.message);
-// 		}
-// 		callback(row);
-// 	});
-// };
+export const updateUserPurchasedProducts = async (
+	userId: string,
+	newPurchasedProducts: string
+) => {
+	return await prisma.user.update({
+		where: {
+			id: userId,
+		},
+		data: {
+			purchased_products: newPurchasedProducts,
+		},
+	});
 
-// export const updateUserPurchasedProducts = (
-// 	user: string,
-// 	newPurchasedProducts: string,
-// 	callback: any
-// ) => {
-// 	const sql = `UPDATE USERS SET Purchased_products=$newPurchasedProducts WHERE ID=$user`;
-// 	database.run(sql, [newPurchasedProducts, user], (error: any, row: any) => {
-// 		if (error) {
-// 			callback(error.message);
-// 		}
-// 		callback();
-// 	});
-// };
+	// const sql = `UPDATE USERS SET Purchased_products=$newPurchasedProducts WHERE ID=$user`;
+	// database.run(sql, [newPurchasedProducts, user], (error: any, row: any) => {
+	// 	if (error) {
+	// 		callback(error.message);
+	// 	}
+	// 	callback();
+	// });
+};
 
 // Validations
 
