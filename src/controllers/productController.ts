@@ -35,7 +35,7 @@ export const createProduct: RequestHandler = async (req, res) => {
 
 	const message = 'The Product has been created successfully.';
 
-	res.send(message);
+	res.status(201).send(message);
 };
 
 // // @desc        Get product info
@@ -117,7 +117,7 @@ export const purchaseProduct: RequestHandler = async (req, res) => {
 
 					purchasedProducts.push(product.id);
 				} else {
-					purchasedProducts = Array(product.id);
+					purchasedProducts = new Array(product.id);
 				}
 
 				// Convert back to string

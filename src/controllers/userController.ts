@@ -42,7 +42,7 @@ export const registerUser: RequestHandler = async (req, res) => {
 
 	const message = 'The user has been created successfully.';
 
-	res.json(message);
+	res.status(201).json(message);
 };
 
 // @desc        Get user info
